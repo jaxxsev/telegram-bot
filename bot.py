@@ -24,9 +24,11 @@ def format_message(message_text):
 async def forward_message(event):
     try:
         message_text = event.message.message
+        print(f"📩 Pesan diterima: {message_text}")  # Menampilkan semua pesan yang masuk
+
         if "kucoin" in message_text.lower():  # Hanya jika mengandung "KuCoin"
             formatted_text = format_message(message_text)
-            print(f"Meneruskan pesan: {formatted_text}")
+            print(f"✅ Meneruskan pesan: {formatted_text}")  # Tampilkan pesan yang diteruskan
             await client.send_message(
                 entity=group_destination,
                 message=formatted_text,
@@ -34,19 +36,19 @@ async def forward_message(event):
             )
             await asyncio.sleep(1)  # Hindari flood limit Telegram
         else:
-            print("Pesan tidak mengandung 'KuCoin'.")
+            print("❌ Pesan tidak mengandung 'KuCoin', tidak diteruskan.")
     except Exception as e:
-        print(f"Error saat meneruskan pesan: {e}")
+        print(f"⚠️ Error saat meneruskan pesan: {e}")
 
 async def main():
     await client.start()
     user = await client.get_me()
-    print(f"Bot berjalan sebagai: {user.username if user.username else user.phone}")
-    print("Menunggu pesan...")
+    print(f"🚀 Bot berjalan sebagai: {user.username if user.username else user.phone}")
+    print("📡 Menunggu pesan masuk...")
     await client.run_until_disconnected()
 
 if __name__ == "__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
-        print("Bot dihentikan secara manual dari terminal.")
+        print("🛑 Bot dihentikan secara manual dari terminal.")
