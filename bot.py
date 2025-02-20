@@ -1,6 +1,5 @@
 from telethon import TelegramClient, events
 import asyncio
-import pyperclip
 import re
 
 # Konfigurasi API
@@ -16,7 +15,6 @@ def format_message(message_text):
     mint_match = re.search(r'Mint: ([a-zA-Z0-9]+)', message_text)
     if mint_match:
         mint_address = mint_match.group(1)
-        pyperclip.copy(mint_address)  # Salin otomatis ke clipboard
         message_text = message_text.replace(mint_address, f'<a href="https://solscan.io/account/{mint_address}" style="color:blue;">{mint_address}</a>')
     return message_text
 
