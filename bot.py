@@ -1,25 +1,15 @@
 from telethon import TelegramClient, events
 import asyncio
-import pyperclip
 import re
 
 # Konfigurasi
 api_id = 21305357
 api_hash = 'cfe6cf4f1aff53c42592813935f5bac1'
-channel_source = -1002108289721  # ID numerik channel A
-group_destination = -1001684715713  # ID numerik grup B
+channel_source = -1002108289721  # ID numerik channel sumber
+group_destination = -1001684715713  # ID numerik grup tujuan
 
 # Inisialisasi sebagai akun pengguna
 client = TelegramClient('user_session', api_id, api_hash)
-
-def format_message(message_text):
-    """Fungsi untuk memformat pesan dan mengganti mint address dengan link"""
-    mint_match = re.search(r'Mint: ([a-zA-Z0-9]+)', message_text)
-    if mint_match:
-        mint_address = mint_match.group(1)
-        pyperclip.copy(mint_address)  # Salin otomatis ke clipboard
-        message_text = message_text.replace(mint_address, f'<a href="https://solscan.io/account/{mint_address}" style="color:blue;">{mint_address}</a>')
-    return message_text
 
 @client.on(events.NewMessage(chats=channel_source))
 async def forward_message(event):
@@ -27,19 +17,15 @@ async def forward_message(event):
         message_text = event.message.message
         print(f"Pesan diterima: {message_text}")  # Debugging
 
-        # Cek apakah ada kata "KuCoin"
+        # Cek apakah pesan mengandung "KuCoin"
         if "kucoin" in message_text.lower():
-            # Cari pola supply yang diawali dengan 42,690 atau 42690
-            supply_match = re.search(r"Supply:\s*(42,690|42690)[0-9,]*", message_text)
-
-            if supply_match:
-                formatted_text = format_message(message_text)
-                print(f"Meneruskan pesan: {formatted_text}")
+            # Cek apakah Supply diawali dengan 42,690 atau 42690
+            if re.search(r"Supply:\s*(42,690|42690)[0-9,]*", message_text):
+                print(f"Meneruskan pesan tanpa perubahan:\n{message_text}")
 
                 await client.send_message(
                     entity=group_destination,
-                    message=formatted_text,
-                    parse_mode='html'
+                    message=message_text  # Mengirim pesan tanpa perubahan
                 )
 
                 await asyncio.sleep(1)  # Hindari flood limit Telegram
