@@ -3,11 +3,11 @@ import asyncio
 import pyperclip
 import re
 
-# Konfigurasi
+# Konfigurasi API
 api_id = 21305357
 api_hash = 'cfe6cf4f1aff53c42592813935f5bac1'
-channel_source = -1002108289721  # ID numerik channel A
-group_destination = -1001684715713  # ID numerik grup B
+channel_source = -1002108289721  # ID Channel Sumber (A)
+group_destination = -1001684715713  # ID Grup Tujuan (B)
 
 # Inisialisasi sebagai akun pengguna
 client = TelegramClient('user_session', api_id, api_hash)
@@ -24,7 +24,7 @@ def format_message(message_text):
 async def forward_message(event):
     try:
         message_text = event.message.message
-        if any(keyword in message_text.lower() for keyword in ["binance", "bitget", "coinbase"]):
+        if "kucoin" in message_text.lower():  # Hanya jika mengandung "KuCoin"
             formatted_text = format_message(message_text)
             print(f"Meneruskan pesan: {formatted_text}")
             await client.send_message(
@@ -32,10 +32,9 @@ async def forward_message(event):
                 message=formatted_text,
                 parse_mode='html'
             )
-            
             await asyncio.sleep(1)  # Hindari flood limit Telegram
         else:
-            print("Pesan tidak mengandung kata kunci yang diinginkan.")
+            print("Pesan tidak mengandung 'KuCoin'.")
     except Exception as e:
         print(f"Error saat meneruskan pesan: {e}")
 
