@@ -6,7 +6,7 @@ import re
 api_id = 21305357
 api_hash = 'cfe6cf4f1aff53c42592813935f5bac1'
 channel_source = -1002108289721  # ID numerik channel sumber
-group_destination = -1001684715713  # ID numerik grup tujuan
+group_destination = -1002383914499  # ID numerik grup tujuan (diubah)
 
 # Inisialisasi sebagai akun pengguna
 client = TelegramClient('user_session', api_id, api_hash)
@@ -19,8 +19,8 @@ async def forward_message(event):
 
         # Cek apakah pesan mengandung "KuCoin"
         if "kucoin" in message_text.lower():
-            # Cek apakah Supply diawali dengan 42,690 atau 42690
-            if re.search(r"Supply:\s*(42,690|42690)[0-9,]*", message_text):
+            # Cek apakah Supply diawali dengan "42,690,000,000,000,000"
+            if re.search(r"Supply:\s*42,690,000,000,000,000", message_text):
                 print(f"Meneruskan pesan tanpa perubahan:\n{message_text}")
 
                 await client.send_message(
