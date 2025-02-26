@@ -19,6 +19,11 @@ async def forward_message(event):
 
         # Cek apakah pesan mengandung "SONIC" atau "$sonic" (tidak case sensitive)
         if re.search(r"\bSONIC\b|\$sonic", message_text, re.IGNORECASE):
+            # Cek apakah pesan juga mengandung "madapes"
+            if re.search(r"madapes", message_text, re.IGNORECASE):
+                print("Pesan mengandung 'SONIC' atau '$sonic' tetapi juga mengandung 'madapes', tidak diteruskan.")
+                return
+            
             print(f"Meneruskan pesan tanpa perubahan:\n{message_text}")
             
             await client.send_message(
